@@ -5,6 +5,7 @@ Created on Thu Nov 16 19:47:50 2017
 @author: lfoul
 """
 import OpenGL.GL as gl
+from Wall import Wall
 
 class House:
     # Constructor
@@ -41,5 +42,15 @@ class House:
             
     # Draws the house      
     def draw(self):  
-        # A compléter en remplaçant pass par votre code
-        pass        
+      
+        Wall_1 = Wall({'position': self.parameters['position'], 'width':7, 'height':2.6, 'edges': True})
+        self.add(Wall_1)
+        Wall_2 = Wall({'position': self.parameters['position'], 'width':7, 'height':2.6, 'edges': True})
+        self.add(Wall_2)
+        Wall_3 = Wall({'position': self.parameters['position'], 'width':7, 'height':2.6, 'edges': True})
+        self.add(Wall_3)
+        Wall_4 = Wall({'position': self.parameters['position'], 'width':7, 'height':2.6, 'edges': True})
+        self.add(Wall_4)
+        
+      
+        

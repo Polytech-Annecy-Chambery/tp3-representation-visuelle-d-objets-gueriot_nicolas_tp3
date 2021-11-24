@@ -16,13 +16,12 @@ import copy
 
 
 def Q1a():
-    pass
+    return Configuration()
     
 def Q1b_f():
     return Configuration({'screenPosition': -5, 'xAxisColor': [1, 1, 0]}). \
         setParameter('xAxisColor', [1, 1, 0]). \
-        setParameter('yAxisCo lor', [0,1,1]). \
-        display()
+        setParameter('yAxisColor', [0,1,1])
         
 def Q2b():
     # Ecriture en utilisant le chaînage
@@ -37,17 +36,17 @@ def Q2c():
             )
 
 def Q3a():
-    pass  
+    return Configuration().add(Wall({'position': [1, 1, 0], 'width':7, 'height':2.6, 'edges': True}))
 
 def Q4a():
     # Ecriture en utilisant des variables : A compléter
-    wall1 = Wall(...)
-    wall2 = Wall(...)
-    wall3 = Wall(...)
-    wall4 = Wall(...)  
+    """    wall1 = Wall({   , 'width':7, 'height':2.6, 'edges': True})
+    wall2 = Wall({   , 'width':7, 'height':2.6, 'edges': True})
+    wall3 = Wall({   , 'width':7, 'height':2.6, 'edges': True})
+    wall4 = Wall({   , 'width':7, 'height':2.6, 'edges': True})  
     house = House({'position': [-3, 1, 0], 'orientation':0})
     house.add(wall1).add(wall3).add(wall4).add(wall2)
-    return Configuration().add(house)   
+    return Configuration().add(house)   """
     
 def Q5a():  
     # Ecriture avec mélange de variable et de chaînage    
@@ -94,12 +93,12 @@ def Q6():
 def main():
     # Enlever un des commentaires pour la question traitée
     
-    configuration = Q1a()
-    # configuration = Q1b_f()
+    #configuration = Q1a()
+    configuration = Q1b_f()
     # configuration = Q2b()
     # configuration = Q2c()
     # configuration = Q3a()
-    # configuration = Q4a()
+    #configuration = Q4a()
     # configuration = Q5a()
     # configuration = Q5b()
     # configuration = Q5c1()

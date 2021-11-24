@@ -50,13 +50,35 @@ class Section:
         self.parameters[parameterKey] = parameterValue
         return self     
 
-    # Defines the vertices and faces 
     def generate(self):
-        self.vertices = [ 
-                # Définir ici les sommets
+        # Définie tous les points à partir des paramètres
+        self.vertices = [
+                # Point A
+                self.parameters['position'], 
+                # Point E
+                [self.parameters['position'][0], self.parameters['position'][1], self.parameters['position'][2] + self.parameters['height']],
+                # Point F
+                [self.parameters['position'][0] + self.parameters['width'], self.parameters['position'][1], self.parameters['position'][2] + self.parameters['height']],
+                # Point B
+                [self.parameters['position'][0] + self.parameters['width'], self.parameters['position'][1], self.parameters['position'][2]],
+                # Point D
+                [self.parameters['position'][0], self.parameters['position'][1] + self.parameters['thickness'], self.parameters['position'][2]],
+                # Point H
+                [self.parameters['position'][0], self.parameters['position'][1] + self.parameters['thickness'], self.parameters['position'][2] + self.parameters['height']],
+                # Point G
+                [self.parameters['position'][0] + self.parameters['width'], self.parameters['position'][1]+self.parameters['thickness'], self.parameters['position'][2] + self.parameters['height']],
+                # Point C
+                [self.parameters['position'][0] + self.parameters['width'], self.parameters['position'][1]+self.parameters['thickness'],self.parameters['position'][2] ]
                 ]
+        
+        # Définie toutes les faces
         self.faces = [
-                # définir ici les faces
+                [0,3,2,1], # Face AEFB
+                [0,4,5,1], # Face ADHE
+                [4,7,6,5], # Face DCGH
+                [3,7,6,2], # Face BCGF
+                [0,3,7,4], # Face ABCD
+                [1,2,6,5]  # Face EFGH            
                 ]   
 
     # Checks if the opening can be created for the object x
@@ -71,11 +93,45 @@ class Section:
         
     # Draws the edges
     def drawEdges(self):
-        # A compléter en remplaçant pass par votre code
-        pass           
+       
+        gl.glPolygonMode(gl.GL_FRONT_AND_BACK,gl.GL_LINE) # on trace les faces : GL_FILL
+        gl.glBegin(gl.GL_QUADS)# Tracé de ligne
+        
+        
+        for y in self.faces:
+            
+            facteur = 0.5
+                       
+            gl.glColor3fv([0.5 * facteur, 0.5 * facteur, 0.5 * facteur])
+                
+            for i in range(0,4):
+
+                x = y[i]
+                gl.glVertex3fv(self.vertices[x])
+                
+        
+        gl.glEnd()           
                     
     # Draws the faces
     def draw(self):
-        # A compléter en remplaçant pass par votre code
-        pass
+
+        if self.parameters['edges'] == True :
+            self.drawEdges()
+
+        gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_FILL) # on trace les faces : GL_FILL
+        gl.glBegin(gl.GL_QUADS)# Tracé d’un quadrilatère
+        
+        for y in self.faces:
+            
+            
+            gl.glColor3fv([0.5, 0.5, 0.5]) # Couleur gris moyen
+            
+            for i in range(0,4):
+                x = y[i]
+                gl.glVertex3fv(self.vertices[x])
+        
+        
+        gl.glEnd()
+        
+
   

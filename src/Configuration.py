@@ -74,7 +74,8 @@ class Configuration:
 
         gl.glMatrixMode(gl.GL_MODELVIEW)
         gl.glLoadIdentity()
-        gl.glTranslatef(0.0,0.0, self.parameters['screenPosition'])       
+        gl.glTranslatef(0.0,0.0, self.parameters['screenPosition'])
+        gl.glRotatef(-90, 1, 0, 0)
         
     # Getter
     def getParameter(self, parameterKey):
@@ -134,26 +135,66 @@ class Configuration:
         for x in self.objects:
             x.draw()
             
-    # Processes the KEYDOWN event
     def processKeyDownEvent(self):
-        # Rotates around the z-axis                       
+       
+        # Fait une rotation autour de z
+        # Vérification des touches               
         if self.event.dict['unicode'] == 'Z' or (self.event.mod & pygame.KMOD_SHIFT and self.event.key == pygame.K_z):
-            gl.glRotate(-2.5, 0, 0, 1)                     
+            gl.glRotate(-2.5, 0, 0, 1)   # Rotation
+        # Vérification des touches                    
         elif self.event.dict['unicode'] == 'z' or self.event.key == pygame.K_z:
-            gl.glRotate(2.5, 0, 0, 1) 
+            gl.glRotate(2.5, 0, 0, 1)    # Rotation
         
-        # Draws or suppresses the reference frame
+        # Trace ou supprime les axes de référence
+        # Vérification des touches 
         elif self.event.dict['unicode'] == 'a' or self.event.key == pygame.K_a:
+            # Vérification que les axes ne sont pas nuls
             self.parameters['axes'] = not self.parameters['axes']
             pygame.time.wait(300)
+        
+        # Vérification de la touche PageUp   
+        elif (self.event.key == pygame.K_PAGEUP) :
+            # Mise à l'échelle de facteur 1.1
+            gl.glScalef(1.1, 1.1, 1.1)
+            
+        # Vérification de la touche PageDown    
+        elif (self.event.key == pygame.K_PAGEDOWN) :
+            # Mise à l'échelle de facteur 1/1.1
+            gl.glScalef(1/1.1, 1/1.1, 1/1.1)
     
-    # Processes the MOUSEBUTTONDOWN event
+
     def processMouseButtonDownEvent(self):
-        pass
+        
+        # Verifie si le mouvement de la mollette est vers le haut
+        if self.event.button == 4 :
+            # Mise à l'échelle de facteur 1.1
+            gl.glScalef(1.1, 1.1, 1.1)
+        
+        # Verifie si le mouvement de la mollette est vers le bas              
+        elif self.event.button == 5 :
+            # Mise à l'échelle de facteur 1/1.1
+            gl.glScalef(1/1.1, 1/1.1, 1/1.1)
     
-    # Processes the MOUSEMOTION event
+    
     def processMouseMotionEvent(self):
-        pass
+        
+        # On verifie si le pouton pressé est le gauche
+        if pygame.mouse.get_pressed()[0] == 1 :
+            
+             # On récupère le déplacement en x et y
+             x = self.event.rel[0]
+             y = self.event.rel[1]
+             # On effectue une rotation
+             gl.glRotate(1, x, 1, y)
+                    
+        # On verifie si le pouton pressé est le droit    
+        elif pygame.mouse.get_pressed()[2] == 1 :
+             # On récupère le déplacement en x et y puis on divise
+             # par 100 pour que le changement ne soit pas trop brutal
+             x = self.event.rel[0]/100
+             y = self.event.rel[1]/100
+             # On effectue une translation en x et y
+             gl.glTranslatef(x, 0, y)  
          
     # Displays on screen and processes events    
     def display(self): 
