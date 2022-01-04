@@ -65,7 +65,7 @@ class Door:
     
     # Adds an object to the object list
     def add(self, x):
-        section = self.findSection(x)
+        """section = self.findSection(x)
         # Removes the section from the list
         if section != None:
             newSections = section[1].createNewSections(x)         
@@ -85,8 +85,8 @@ class Door:
             # Adds the new door with opening
             self.objects.extend(newSections)           
 
-            # Adds the window 
-            self.objects.append(x) 
+            # Adds the window """
+        self.objects.append(x) 
             
         return self            
     

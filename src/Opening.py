@@ -46,14 +46,56 @@ class Opening:
 
     # Defines the vertices and faces        
     def generate(self):
-        self.vertices = [ 
-                # Définir ici les sommets
+         self.vertices = [
+                [0,0,0], 
+                [0, 0, self.parameters['height']], 
+                [self.parameters['width'], 0, self.parameters['height']],
+                [self.parameters['width'], 0, 0],
+                
+                [0, self.parameters['thickness'], 0 ], 
+                [0, self.parameters['thickness'], self.parameters['height']], 
+                [self.parameters['width'],  self.parameters['thickness'], self.parameters['height']],
+                [self.parameters['width'],  self.parameters['thickness'], 0]
                 ]
-        self.faces = [
-                # définir ici les faces
-                ]   
+         self.faces = [
+                [0, 1, 5, 4],
+                [0, 3, 7, 4],
+                [1, 2, 6, 5],
+                [3, 2, 6, 7]
+                ]
+            
+    def drawEdges(self):
+       
+        gl.glPolygonMode(gl.GL_FRONT_AND_BACK,gl.GL_LINE) # On trace les faces : GL_FILL
+        gl.glBegin(gl.GL_QUADS) # Tracé de ligne
         
-    # Draws the faces                
+        
+        for y in self.faces:
+            
+            facteur = 0.5 #défini la couleur des arêtes
+                       
+            gl.glColor3fv([0.5 * facteur, 0.5 * facteur, 0.5 * facteur]) # Couleur
+                
+            for i in range(0,4):
+
+                x = y[i]
+                gl.glVertex3fv(self.vertices[x]) # Tracé des vertices
+                
+        
+        gl.glEnd()
+                  
     def draw(self):        
-        # A compléter en remplaçant pass par votre code
-        pass
+        
+        gl.glPushMatrix() # Crée une matrice de projection temporaire
+        gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_FILL) # On trace les faces : GL_FILL
+        gl.glTranslatef(self.parameters['position'][0], self.parameters['position'][1], self.parameters['position'][2]) # Translate l'ouverture
+        
+        for f in self.faces:
+            gl.glBegin(gl.GL_QUADS) # Trace un quadrilatère
+            gl.glColor3fv(self.parameters['color']) # Couleur
+            for e in f : 
+                gl.glVertex3fv(self.vertices[e]) # Trace les vertices
+            gl.glEnd()
+        self.drawEdges()
+        gl.glPopMatrix() # Termine la matrice de projection temporaire
+        

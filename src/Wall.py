@@ -6,6 +6,7 @@ Created on Thu Nov 16 19:47:50 2017
 """
 import OpenGL.GL as gl
 from Section import Section
+from copy import deepcopy
 
 class Wall:
     # Constructor
@@ -32,7 +33,7 @@ class Wall:
         if 'thickness' not in self.parameters:
             self.parameters['thickness'] = 0.2    
         if 'color' not in self.parameters:
-            self.parameters['color'] = [0.5, 0.5, 0.5]       
+            self.parameters['color'] = [0.5, 0.5, 0.5]
             
         # Objects list
         self.objects = []
@@ -63,15 +64,40 @@ class Wall:
     
     # Adds an object    
     def add(self, x):    
-        self.objects.append(x)
-        return self        
+        section = self.findSection(x) # Cherche la section
+        
+        # Calcule de la position relative entre l'ouverture et la section
+        position_Relative = [
+            x.parameters["position"][0] - (section[1].getParameter("position")[0]),
+            x.parameters["position"][1] - (section[1].getParameter("position")[1]),
+            x.parameters["position"][2] - (section[1].getParameter("position")[2]),
+        ]
+        
+        
+        self.objects.append(x)  # Ajoute l'ouverture
+        
+        newopening= deepcopy(x) # Copie profonde afin de ne pas modifier x
+        
+        # On change la position de la nouvelle ouverture en fonction de la position relative
+        newopening.setParameter("position", position_Relative) 
+        
+        #On crée une nouvelle liste de sections contenant les sections nouvellement crées
+        new_Sections = section[1].createNewSections(newopening)
+        
+        self.objects.pop(section[0]) # On supprime la section original
+        
+        # On ajoute toutes les nouvelles sections
+        for i in new_Sections:      
+            self.objects.append(i)
+        return self    
                     
     # Draws the faces
     def draw(self):
-        gl.glPushMatrix()
-        gl.glRotatef(self.parameters['orientation'], 0, 0, 1)
-        self.parentSection.drawEdges()
+        
+        gl.glPushMatrix() # Crée une matrice de projection temporaire
+        gl.glRotatef(self.parameters['orientation'], 0, 0, 1)   # Oriente le mur
+        self.parentSection.drawEdges() # Trace les arêtes
         for x in self.objects:
-            x.draw()
-        gl.glPopMatrix()
+            x.draw()    # Appele la méthode draw de section
+        gl.glPopMatrix() # Termine la matrice de projection temporaire
   
